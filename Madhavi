@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Surprise for You</title>
+  <title>Custom Box Quiz</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -102,7 +102,7 @@
 </head>
 <body>
 
-<div class="container">
+<div class="container" id="chess-container">
   <div class="box" id="box1">1</div>
   <div class="box" id="box2">2</div>
   <div class="box" id="box3">3</div>
@@ -115,37 +115,118 @@
 </div>
 
 <div class="question-container" id="question">
-  <p>Do you want to continue with me?</p>
+  <p id="question-text">Placeholder question?</p>
   <div class="options">
-    <div class="option" id="correct-option">Yes</div>
-    <div class="option">No</div>
+    <div class="option" id="option1"></div>
+    <div class="option" id="option2"></div>
   </div>
 </div>
 
 <div class="final-message" id="final-message">
-  <p>You chose the right answer! I'm glad you said Yes!</p>
+  <p id="final-message-text"></p>
 </div>
 
 <!-- Background Overlay -->
 <div class="bg-overlay" id="bg-overlay"></div>
 
-<!-- Background Video (or Image) -->
+<!-- Background Video or Image -->
 <video class="bg-video" id="bg-video" loop muted>
-  <source src="your-video.mp4" type="video/mp4">
+  <source id="video-source" src="" type="video/mp4">
   Your browser does not support the video tag.
 </video>
 
-<!-- If you prefer an image instead of a video, uncomment the following line -->
-<!-- <img src="your-image.jpg" class="bg-image" id="bg-image" alt="Background Image"> -->
+<img src="" class="bg-image" id="bg-image" alt="Background Image">
 
 <script>
   const boxes = document.querySelectorAll('.box');
+  const chessContainer = document.getElementById('chess-container');
   const questionContainer = document.getElementById('question');
+  const questionText = document.getElementById('question-text');
+  const option1 = document.getElementById('option1');
+  const option2 = document.getElementById('option2');
   const finalMessage = document.getElementById('final-message');
-  const correctOption = document.getElementById('correct-option');
-  const bgVideo = document.getElementById('bg-video');
+  const finalMessageText = document.getElementById('final-message-text');
   const bgOverlay = document.getElementById('bg-overlay');
-  const bgImage = document.getElementById('bg-image'); // If using an image instead of video
+  const bgVideo = document.getElementById('bg-video');
+  const bgImage = document.getElementById('bg-image');
+  const videoSource = document.getElementById('video-source');
+
+  // Array to hold questions, options, correct answers, and media for each box
+  const boxData = [
+    {
+      question: "What is my favorite color?",
+      options: ["Blue", "Red"],
+      correctAnswer: "Blue",
+      mediaType: "video",
+      mediaSource: "video1.mp4",
+      finalMessage: "You got it! My favorite color is Blue!"
+    },
+    {
+      question: "Which city do I love?",
+      options: ["Paris", "New York"],
+      correctAnswer: "Paris",
+      mediaType: "image",
+      mediaSource: "paris.jpg",
+      finalMessage: "Correct! I love Paris!"
+    },
+    {
+      question: "What is my favorite food?",
+      options: ["Pizza", "Sushi"],
+      correctAnswer: "Sushi",
+      mediaType: "video",
+      mediaSource: "sushi.mp4",
+      finalMessage: "Yes! I love Sushi!"
+    },
+    {
+      question: "What is my favorite color?",
+      options: ["Blue", "Red"],
+      correctAnswer: "Blue",
+      mediaType: "video",
+      mediaSource: "video1.mp4",
+      finalMessage: "You got it! My favorite color is Blue!"
+    },
+    {
+      question: "Which city do I love?",
+      options: ["Paris", "New York"],
+      correctAnswer: "Paris",
+      mediaType: "image",
+      mediaSource: "paris.jpg",
+      finalMessage: "Correct! I love Paris!"
+    },
+    {
+      question: "What is my favorite food?",
+      options: ["Pizza", "Sushi"],
+      correctAnswer: "Sushi",
+      mediaType: "video",
+      mediaSource: "sushi.mp4",
+      finalMessage: "Yes! I love Sushi!"
+    },
+    {
+      question: "What is my favorite color?",
+      options: ["Blue", "Red"],
+      correctAnswer: "Blue",
+      mediaType: "video",
+      mediaSource: "video1.mp4",
+      finalMessage: "You got it! My favorite color is Blue!"
+    },
+    {
+      question: "Which city do I love?",
+      options: ["Paris", "New York"],
+      correctAnswer: "Paris",
+      mediaType: "image",
+      mediaSource: "paris.jpg",
+      finalMessage: "Correct! I love Paris!"
+    },
+    {
+      question: "What is my favorite food?",
+      options: ["Pizza", "Sushi"],
+      correctAnswer: "Sushi",
+      mediaType: "video",
+      mediaSource: "sushi.mp4",
+      finalMessage: "Yes! I love Sushi!"
+    },
+    // Add more for the remaining boxes as needed
+  ];
 
   // Function to reset everything back to the beginning
   function resetPage() {
@@ -153,6 +234,8 @@
     questionContainer.style.display = 'none';
     finalMessage.style.display = 'none';
     bgOverlay.style.display = 'none';
+    chessContainer.style.display = 'grid'; // Show the chess-patterned boxes again
+
     if (bgVideo) {
       bgVideo.pause();
       bgVideo.currentTime = 0;
@@ -163,33 +246,61 @@
     }
   }
 
-  // Flip effect for the boxes
-  boxes.forEach(box => {
-    box.addEventListener('click', () => {
-      box.classList.add('flipped');
-      setTimeout(() => {
-        questionContainer.style.display = 'block';
-      }, 1000);
-    });
-  });
+  // Function to display question and options for a specific box
+  function displayQuestion(boxIndex) {
+    const data = boxData[boxIndex];
 
-  // Correct option
-  correctOption.addEventListener('click', () => {
+    questionText.textContent = data.question;
+    option1.textContent = data.options[0];
+    option2.textContent = data.options[1];
+
+    // Handle option clicks
+    option1.onclick = () => handleAnswer(data, data.options[0]);
+    option2.onclick = () => handleAnswer(data, data.options[1]);
+
+    questionContainer.style.display = 'block';
+  }
+
+  // Function to handle the selected answer
+  function handleAnswer(data, selectedOption) {
     questionContainer.style.display = 'none';
     finalMessage.style.display = 'block';
-    bgOverlay.style.display = 'block'; // Show dimmed overlay
-    if (bgVideo) {
-      bgVideo.style.display = 'block';
-      bgVideo.play();  // Video will play in the background
+    chessContainer.style.display = 'none'; // Hide chess boxes during the final outcome
+
+    if (selectedOption === data.correctAnswer) {
+      finalMessageText.textContent = data.finalMessage;
+      showMedia(data.mediaType, data.mediaSource);
+    } else {
+      finalMessageText.textContent = "Oops, that's not correct. Try again!";
     }
-    if (bgImage) {
-      bgImage.style.display = 'block'; // Image will display in the background
-    }
-    // After 5 seconds, reset the page
+
     setTimeout(() => {
       finalMessage.style.display = 'none';
       resetPage();
     }, 5000);
+  }
+
+  // Function to show media (image or video)
+  function showMedia(mediaType, mediaSource) {
+    bgOverlay.style.display = 'block';
+    if (mediaType === "video") {
+      videoSource.src = mediaSource;
+      bgVideo.style.display = 'block';
+      bgVideo.play();
+    } else if (mediaType === "image") {
+      bgImage.src = mediaSource;
+      bgImage.style.display = 'block';
+    }
+  }
+
+  // Flip effect and question display for the boxes
+  boxes.forEach((box, index) => {
+    box.addEventListener('click', () => {
+      box.classList.add('flipped');
+      setTimeout(() => {
+        displayQuestion(index);
+      }, 1000);
+    });
   });
 </script>
 
