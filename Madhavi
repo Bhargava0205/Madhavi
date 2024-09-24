@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Surprise for You</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+      overflow: hidden; /* Prevent scrollbars */
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-gap: 10px;
+      z-index: 2; /* Ensure it's above the background */
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      transform: rotateY(0);
+      transition: transform 0.6s;
+    }
+    .flipped {
+      transform: rotateY(180deg);
+    }
+    .question-container {
+      text-align: center;
+      display: none;
+      position: absolute;
+      top: 20%;
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      z-index: 3;
+    }
+    .question-container p {
+      font-size: 18px;
+    }
+    .options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .option {
+      background-color: #007BFF;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .final-message {
+      display: none;
+      text-align: center;
+      font-size: 24px;
+      color: white;
+      position: absolute;
+      top: 20%;
+      width: 80%;
+      margin: auto;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 10px;
+      z-index: 4;
+    }
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+      z-index: 1;
+      display: none; /* Hidden until correct answer is chosen */
+    }
+    .bg-video, .bg-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: 0;
+      display: none; /* Hidden until correct answer is chosen */
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div class="box" id="box1">1</div>
+  <div class="box" id="box2">2</div>
+  <div class="box" id="box3">3</div>
+  <div class="box" id="box4">4</div>
+  <div class="box" id="box5">5</div>
+  <div class="box" id="box6">6</div>
+  <div class="box" id="box7">7</div>
+  <div class="box" id="box8">8</div>
+  <div class="box" id="box9">9</div>
+</div>
+
+<div class="question-container" id="question">
+  <p>Do you want to continue with me?</p>
+  <div class="options">
+    <div class="option" id="correct-option">Yes</div>
+    <div class="option">No</div>
+  </div>
+</div>
+
+<div class="final-message" id="final-message">
+  <p>You chose the right answer! I'm glad you said Yes!</p>
+</div>
+
+<!-- Background Overlay -->
+<div class="bg-overlay" id="bg-overlay"></div>
+
+<!-- Background Video (or Image) -->
+<video class="bg-video" id="bg-video" loop muted>
+  <source src="your-video.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+
+<!-- If you prefer an image instead of a video, uncomment the following line -->
+<!-- <img src="your-image.jpg" class="bg-image" id="bg-image" alt="Background Image"> -->
+
+<script>
+  const boxes = document.querySelectorAll('.box');
+  const questionContainer = document.getElementById('question');
+  const finalMessage = document.getElementById('final-message');
+  const correctOption = document.getElementById('correct-option');
+  const bgVideo = document.getElementById('bg-video');
+  const bgOverlay = document.getElementById('bg-overlay');
+  const bgImage = document.getElementById('bg-image'); // If using an image instead of video
+
+  // Function to reset everything back to the beginning
+  function resetPage() {
+    boxes.forEach(box => box.classList.remove('flipped'));
+    questionContainer.style.display = 'none';
+    finalMessage.style.display = 'none';
+    bgOverlay.style.display = 'none';
+    if (bgVideo) {
+      bgVideo.pause();
+      bgVideo.currentTime = 0;
+      bgVideo.style.display = 'none';
+    }
+    if (bgImage) {
+      bgImage.style.display = 'none';
+    }
+  }
+
+  // Flip effect for the boxes
+  boxes.forEach(box => {
+    box.addEventListener('click', () => {
+      box.classList.add('flipped');
+      setTimeout(() => {
+        questionContainer.style.display = 'block';
+      }, 1000);
+    });
+  });
+
+  // Correct option
+  correctOption.addEventListener('click', () => {
+    questionContainer.style.display = 'none';
+    finalMessage.style.display = 'block';
+    bgOverlay.style.display = 'block'; // Show dimmed overlay
+    if (bgVideo) {
+      bgVideo.style.display = 'block';
+      bgVideo.play();  // Video will play in the background
+    }
+    if (bgImage) {
+      bgImage.style.display = 'block'; // Image will display in the background
+    }
+    // After 5 seconds, reset the page
+    setTimeout(() => {
+      finalMessage.style.display = 'none';
+      resetPage();
+    }, 5000);
+  });
+</script>
+
+</body>
+</html>
