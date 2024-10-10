@@ -13,13 +13,13 @@
       height: 100vh;
       margin: 0;
       background-color: #f0f0f0;
-      overflow: hidden;
+      overflow: hidden; /* Prevent scrollbars */
     }
     .container {
       display: grid;
       grid-template-columns: repeat(3, 100px);
       grid-gap: 10px;
-      z-index: 2;
+      z-index: 2; /* Ensure it's above the background */
     }
     .box {
       width: 100px;
@@ -84,9 +84,9 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
       z-index: 1;
-      display: none;
+      display: none; /* Hidden until correct answer is chosen */
     }
     .bg-video, .bg-image {
       position: fixed;
@@ -96,7 +96,7 @@
       height: 100vh;
       object-fit: cover;
       z-index: 0;
-      display: none;
+      display: none; /* Hidden until correct answer is chosen */
     }
   </style>
 </head>
@@ -154,22 +154,68 @@
   // Array to hold questions, options, correct answers, and media for each box
   const boxData = [
     {
-      question: "What do I like the most about you?",
+      question: "What i like the most in u?",
       options: ["Hair", "Eyes"],
       correctAnswer: "Hair",
       mediaType: "image",
-      mediaSource: "https://github.com/Nithyam133/Quiz-Box/blob/main/images/hairr.jpeg?raw=true",
-      finalMessage: "Your hair is the first thing that caught my attention!"
+      mediaSource: "https://hair.jpeg",
+      mediaSource: "hairr.jpeg",
+      finalMessage: "Nee Kallu naaku kastha alasyamgane parichayam ayyayiii.......   Tholi parichayam the 1st impression...... nee votthaina, podavaina curly Hair ye Sooo......thats the 1st and best thing that comes into my mind when i hear your name!"
     },
     {
-      question: "What is my Insta Password?",
+      question: "Naa Insta Password?",
       options: ["M@dh@vi26", "M@dhu@2603"],
       correctAnswer: "M@dh@vi26",
-      mediaType: "image",
-      mediaSource: "https://github.com/Nithyam133/Quiz-Box/blob/main/images/insta.jpeg?raw=true",
-      finalMessage: "That's right, it's a secret between us!"
+      mediaType: "insta.jpeg",
+      mediaType: "instag.jpeg",
+      mediaSource: "https://github.com/Bhargava0205/Madhavi/blob/091081b71e9a5f048cd6681731099129f18faead/insta.jpeg",
+      finalMessage: "Ahaaaa.... andhuke nee netflix password adhe pettanuu   eeeeeeeeeeeee!"
     },
-    // Add more data here as needed...
+@@ -190,119 +190,119 @@
+      options: ["Yesss", "Nooooo"],
+      correctAnswer: "Yesss",
+      mediaType: "image",
+      mediaSource: "cheeks.jpeg",
+      mediaSource: "rakshadi.jpeg",
+      finalMessage: "Destiny emo kaaaani i feel like all the things are aligned..... naaaku mundhu nunchi nv ante istame....But... 1 year back what are wee.. and now what are weee.... Haha.... not the destiny but trusting the Gut feelingggg!"
+    },
+    {
+      question: "Nv K dramas endhuke choosthav?",
+      options: ["Romance", "Butterflies"],
+      correctAnswer: "romance",
+      correctAnswer: "Romance",
+      mediaType: "image",
+      mediaSource: "sushi.mp4",
+      mediaSource: "candid.jpeg",
+      finalMessage: "Haha.... romance is not only about intimacy..... it's more about showing the love..... intimacy may or may not last for long but showing love 90's lo kuda possible ye ( alaaa oka temple loo.... ledha oka manchi view lo nee pic baaga ravalani.....bend aithe pattese back tho goda ekkadaniki try chesthunappudu)"
+    },
+    {
+      question: "Arrange marraige or Love Marraige?",
+      options: ["Arrange", "Love"],
+      correctAnswer: "Love",
+      mediaType: "image",
+      mediaSource: "video1.mp4",
+      mediaSource: "destinyy.jpeg",
+      finalMessage: "Love cum Arraged aithe neekemaina problem aaa?? Hehe nee confusions poyaka neeeku nacchinappud nv okay ani strong ga nilabadu chaaalu..... M chesaina oppisthaaaaaa......!"
+    },
+    {
+      question: "What does MB Stands for ?",
+      options: ["Megabyte", "Mahesh Babu"],
+      correctAnswer: "Mahesh Babu",
+      mediaType: "image",
+      mediaSource: "mehandi.jpeg",
+      mediaSource: "maheshbab 2.jpeg",
+      finalMessage: "not only mahesh babu andi..... Madhavi(M) Bhargava(M) kuda see mee mahesh babu blessings kuda unnai!"
+    },
+    {
+      question: "Will you marry me?",
+      options: ["Yes", "No"],
+      correctAnswer: "Yes",
+      mediaType: "image",
+      mediaSource: "kalasam.jpeg",
+      finalMessage: "Eveeeeeeeee.... haha ponile atlaaaasttt......  #Thelingggggggg Uhallooo"
+    },
+    // Add more for the remaining boxes as needed
   ];
 
   // Function to reset everything back to the beginning
@@ -178,7 +224,7 @@
     questionContainer.style.display = 'none';
     finalMessage.style.display = 'none';
     bgOverlay.style.display = 'none';
-    chessContainer.style.display = 'grid';
+    chessContainer.style.display = 'grid'; // Show the chess-patterned boxes again
 
     if (bgVideo) {
       bgVideo.pause();
@@ -209,7 +255,7 @@
   function handleAnswer(data, selectedOption) {
     questionContainer.style.display = 'none';
     finalMessage.style.display = 'block';
-    chessContainer.style.display = 'none'; 
+    chessContainer.style.display = 'none'; // Hide chess boxes during the final outcome
 
     if (selectedOption === data.correctAnswer) {
       finalMessageText.textContent = data.finalMessage;
@@ -221,4 +267,32 @@
     setTimeout(() => {
       finalMessage.style.display = 'none';
       resetPage();
-   
+    }, 5000);
+  }
+
+  // Function to show media (image or video)
+  function showMedia(mediaType, mediaSource) {
+    bgOverlay.style.display = 'block';
+    if (mediaType === "video") {
+      videoSource.src = mediaSource;
+      bgVideo.style.display = 'block';
+      bgVideo.play();
+    } else if (mediaType === "image") {
+      bgImage.src = mediaSource;
+      bgImage.style.display = 'block';
+    }
+  }
+
+  // Flip effect and question display for the boxes
+  boxes.forEach((box, index) => {
+    box.addEventListener('click', () => {
+      box.classList.add('flipped');
+      setTimeout(() => {
+        displayQuestion(index);
+      }, 1000);
+    });
+  });
+</script>
+
+</body>
+</html>
