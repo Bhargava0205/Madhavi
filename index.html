@@ -13,13 +13,13 @@
       height: 100vh;
       margin: 0;
       background-color: #f0f0f0;
-      overflow: hidden; /* Prevent scrollbars */
+      overflow: hidden;
     }
     .container {
       display: grid;
       grid-template-columns: repeat(3, 100px);
       grid-gap: 10px;
-      z-index: 2; /* Ensure it's above the background */
+      z-index: 2;
     }
     .box {
       width: 100px;
@@ -84,9 +84,9 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+      background-color: rgba(0, 0, 0, 0.5);
       z-index: 1;
-      display: none; /* Hidden until correct answer is chosen */
+      display: none;
     }
     .bg-video, .bg-image {
       position: fixed;
@@ -96,7 +96,7 @@
       height: 100vh;
       object-fit: cover;
       z-index: 0;
-      display: none; /* Hidden until correct answer is chosen */
+      display: none;
     }
   </style>
 </head>
@@ -158,73 +158,18 @@
       options: ["Hair", "Eyes"],
       correctAnswer: "Hair",
       mediaType: "image",
-      mediaSource: "hairr.jpeg",
-      finalMessage: "Nee Kallu naaku kastha alasyamgane parichayam ayyayiii.......   Tholi parichayam the 1st impression...... nee votthaina, podavaina curly Hair ye Sooo......thats the 1st and best thing that comes into my mind when I hear your name!"
+      mediaSource: "https://github.com/Nithyam133/Quiz-Box/blob/main/images/hairr.jpeg?raw=true",
+      finalMessage: "Your hair is the first thing that caught my attention!"
     },
     {
       question: "What is my Insta Password?",
       options: ["M@dh@vi26", "M@dhu@2603"],
       correctAnswer: "M@dh@vi26",
-      mediaType: "image", // Fixed: added missing comma
-      mediaSource: "https://github.com/Bhargava0205/Madhavi/blob/091081b71e9a5f048cd6681731099129f18faead/insta.jpeg",
-      finalMessage: "Ahaaaa.... andhuke nee netflix password adhe pettanuu   eeeeeeeeeeeee!"
-    },
-    {
-      question: "Madhavi..... do you know the score of Kundli Matching (Jathakam) out of 36?",
-      options: ["30", "19"],
-      correctAnswer: "19",
       mediaType: "image",
-      mediaSource: "mehandi.jpeg",
-      finalMessage: "Oyeyey, above 16 it's a good score antaaa.... but rathalu antha bnalekapothe.... ilaa gorintakuthooo andhamga marchedham!"
+      mediaSource: "https://github.com/Nithyam133/Quiz-Box/blob/main/images/insta.jpeg?raw=true",
+      finalMessage: "That's right, it's a secret between us!"
     },
-    {
-      question: "Ninnu nenu piliche pilupu... nv natho aadukunetappudu?",
-      options: ["Miss Meow", "Rakshasi"],
-      correctAnswer: "Rakshasi",
-      mediaType: "image",
-      mediaSource: "rakshasi.jpeg",
-      finalMessage: "Nv nijamgaane rakshasivi..... eee jathakam loo see nee ganamu raakshasa ganame...... meee manushya ganamu!"
-    },
-    {
-      question: "Destiny Undhantaava manakiiiiiii?",
-      options: ["Yesss", "Nooooo"],
-      correctAnswer: "Yesss",
-      mediaType: "image",
-      mediaSource: "desteen.jpeg",
-      finalMessage: "Destiny emo kaaaani I feel like all the things are aligned..... naaaku mundhu nunchi nv ante istame....But... 1 year back what are wee.. and now what are weee.... Haha.... not the destiny but trusting the gut feelingggg!"
-    },
-    {
-      question: "Nv K dramas endhuke choosthav?",
-      options: ["Romance", "Butterflies"],
-      correctAnswer: "Romance",
-      mediaType: "image",
-      mediaSource: "candid.jpeg",
-      finalMessage: "Haha.... romance is not only about intimacy..... it's more about showing the love..... intimacy may or may not last for long but showing love 90's lo kuda possible ye."
-    },
-    {
-      question: "Arrange marriage or Love Marriage?",
-      options: ["Arrange", "Love"],
-      correctAnswer: "Love",
-      mediaType: "image",
-      mediaSource: "destinyy.jpeg",
-      finalMessage: "Love cum arranged aithe neekemaina problem aaa?? Hehe nee confusions poyaka neeeku nacchinappud nv okay ani strong ga nilabadu chaaalu..... M chesaina oppisthaaaaaa......!"
-    },
-    {
-      question: "Nuvve kuda andaritho plan chesuko?",
-      options: ["Yes", "No"],
-      correctAnswer: "Yes",
-      mediaType: "image",
-      mediaSource: "myplace.jpeg",
-      finalMessage: "Yes, life lo heyy... Everything comes with a plan... And I am here to be a part of all those plans!"
-    },
-    {
-      question: "Edhena chayyyalante naku ninnu cadhuvidamu?",
-      options: ["Yes", "No"],
-      correctAnswer: "Yes",
-      mediaType: "image",
-      mediaSource: "team.jpeg",
-      finalMessage: "Life is too short to be alone...... I don't want to die alone!"
-    }
+    // Add more data here as needed...
   ];
 
   // Function to reset everything back to the beginning
@@ -233,7 +178,7 @@
     questionContainer.style.display = 'none';
     finalMessage.style.display = 'none';
     bgOverlay.style.display = 'none';
-    chessContainer.style.display = 'grid'; // Show the chess-patterned boxes again
+    chessContainer.style.display = 'grid';
 
     if (bgVideo) {
       bgVideo.pause();
@@ -264,7 +209,7 @@
   function handleAnswer(data, selectedOption) {
     questionContainer.style.display = 'none';
     finalMessage.style.display = 'block';
-    chessContainer.style.display = 'none'; // Hide chess boxes during the final outcome
+    chessContainer.style.display = 'none'; 
 
     if (selectedOption === data.correctAnswer) {
       finalMessageText.textContent = data.finalMessage;
@@ -276,31 +221,4 @@
     setTimeout(() => {
       finalMessage.style.display = 'none';
       resetPage();
-    }, 5000);
-  }
-
-  // Function to show media (image or video)
-  function showMedia(mediaType, mediaSource) {
-    bgOverlay.style.display = 'block';
-    if (mediaType === "video") {
-      videoSource.src = mediaSource;
-      bgVideo.style.display = 'block';
-      bgVideo.play();
-    } else if (mediaType === "image") {
-      bgImage.src = mediaSource;
-      bgImage.style.display = 'block';
-    }
-  }
-
-  // Flip effect and question display for the boxes
-  boxes.forEach((box, index) => {
-    box.addEventListener('click', () => {
-      box.classList.add('flipped');
-      setTimeout(() => {
-        displayQuestion(index);
-      }, 600); // Delay for flip effect
-    });
-  });
-</script>
-</body>
-</html>
+   
